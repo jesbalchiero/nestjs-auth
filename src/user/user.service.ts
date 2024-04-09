@@ -9,27 +9,74 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    const data = {
-      ...createUserDto,
-      password: await bcrypt.hash(createUserDto.password, 10),
-    };
+    try {
+      const data = {
+        ...createUserDto,
+        password: await bcrypt.hash(createUserDto.password, 10),
+      };
 
-    const createdUser = await this.prisma.user.create({
-      data,
-    });
+      const createdUser = await this.prisma.user.create({
+        data,
+      });
 
-    return {
-      ...createdUser,
-      password: undefined,
-    };
+      return {
+        ...createdUser,
+        password: undefined,
+      };
+    } catch (error) {
+      throw new Error(`Error creating the user: ${error.message}`);
+    }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    try {
+      return await this.prisma.user.findMany({
+        orderBy: {
+          id: 'desc',
+        },
+      });
+    } catch (error) {
+      throw new Error(`Error finding all users: ${error.message}`);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`Error finding the user by ID: ${error.message}`);
+    }
+  }
+
+  async findByEmail(email: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email },
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`Error finding the user by Email: ${error.message}`);
+    }
+  }
+
+  async findByName(name: string) {
+    try {
+      const user = await this.prisma.user.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`Error finding the user by Name: ${error.message}`);
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
