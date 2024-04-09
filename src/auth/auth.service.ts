@@ -1,8 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
+import * as bcrypt from 'bcrypt';
+import { UnauthorizedError } from './errors/unauthorized.error';
 
 @Injectable()
 export class AuthService {
-  validateUser(email: string, password: string) {
-    throw new Error('Method not implemented.');
+  constructor(private readonly userService: UserService) {}
+
+  async validateUser(email: string, password: string) {
+    const user = await this.userService.findByEmail(email);
+    if (user) {
+      // Check password, comparing with bcrypt
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (isPasswordValid) {
+        return {
+          ...user,
+          password: undefined,
+        };
+      }
+    }
+
+    // Return error
+    throw new UnauthorizedError(
+      'Email address or password provided is incorrect.',
+    );
   }
 }
