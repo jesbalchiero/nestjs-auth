@@ -8,9 +8,17 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto extends User {
+  /**
+   * Email is necessary to realize the login
+   * @example example@example.com
+   */
   @IsEmail()
   email: string;
 
+  /**
+   * Password is necessary to realize the login
+   * @example Password@123
+   */
   @IsString()
   @MinLength(8)
   @MaxLength(20)
@@ -19,6 +27,10 @@ export class CreateUserDto extends User {
   })
   password: string;
 
+  /**
+   * Name is used to show the data of the user
+   * @example Jean Sbalchiero
+   */
   @IsString()
   name: string;
 }
