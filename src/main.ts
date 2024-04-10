@@ -16,8 +16,10 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('')
-    .setDescription('')
+    .setTitle('NestJS auth with JWT')
+    .setDescription(
+      'API REST in NestJS to realize authentication with the Token JWT, and Prisma.',
+    )
     .setVersion('1.0')
     .addTag('user')
     .addTag('auth')
