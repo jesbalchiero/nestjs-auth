@@ -1,6 +1,6 @@
 ## Title
 
-[Nest](https://github.com/nestjs/nest) auth with Token [JWT] (https://jwt.io/)
+[Nest](https://github.com/nestjs/nest) auth with Token JWT
 
 ## Description
 
