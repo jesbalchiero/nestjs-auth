@@ -9,9 +9,15 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @IsPublic()
-  @Get()
+  @Get('hello')
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @IsPublic()
+  @Get()
+  getProjectInfo(): string {
+    return this.appService.getProjectInfo();
   }
 
   @Get('me')
